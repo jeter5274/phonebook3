@@ -34,7 +34,7 @@ public class PhoneController {
 		
 		//model -> date를 보내는 방법 -> 담아 놓으면 된다.
 		model.addAttribute("pList", personList);
-				
+
 		return "/WEB-INF/views/list.jsp";
 	}
 
@@ -59,10 +59,40 @@ public class PhoneController {
 		
 		return "redirect:/phone/list";
 	}
+	
 	// 수정폼 -> modifyForm
-
+	@RequestMapping(value="modifyForm", method = {RequestMethod.GET, RequestMethod.POST})
+	public String modifyForm(Model model, @RequestParam("id") int id) {
+		System.out.println("modifyForm");
+		
+		PhoneDao phoneDao = new PhoneDao();
+		PersonVo personVo = phoneDao.getPerson(id);
+		
+		model.addAttribute("pVo", personVo);
+		
+		return "/WEB-INF/views/updateForm.jsp";
+	}
+	
 	// 수정 -> modify
+	@RequestMapping(value="/modify", method = {RequestMethod.GET, RequestMethod.POST})
+	public String modify(@RequestParam("id") int id, @RequestParam("name") String name, @RequestParam("hp") String hp, @RequestParam("company") String company) {
+		System.out.println("modify");
+		
+		PersonVo personVo = new PersonVo(id, name, hp, company);
+		PhoneDao phoneDao = new PhoneDao();
+		phoneDao.personUpdate(personVo);
+			
+		return "redirect:/phone/list";
+	}
 
 	// 삭제 -> delete
-
+	@RequestMapping(value="delete", method = {RequestMethod.GET, RequestMethod.POST})
+	public String delete(@RequestParam("id") int id) {
+		System.out.println("delete");
+		
+		PhoneDao phoneDao = new PhoneDao();
+		phoneDao.personDelete(id);
+		
+		return "redirect:/phone/list";
+	}
 }

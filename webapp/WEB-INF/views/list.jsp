@@ -29,8 +29,8 @@
 					<td>${pVo.company}</td>
 				</tr>
 				<tr>
-					<td><a href="">[수정]</a></td>
-					<td><a href="">[삭제]</a></td>
+					<td><a href="/phonebook3/phone/modifyForm?id=${pVo.personId}">[수정]</a></td>
+					<td><a href="/phonebook3/phone/delete?id=${pVo.personId}">[삭제]</a></td>
 				</tr>
 			</table>
 			<br>
