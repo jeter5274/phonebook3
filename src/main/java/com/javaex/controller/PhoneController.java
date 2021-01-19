@@ -39,7 +39,7 @@ public class PhoneController {
 	}
 
 	// 등록폼
-	@RequestMapping(value = "writeForm", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/writeForm", method = { RequestMethod.GET, RequestMethod.POST })
 	public String writeForm() {
 		System.out.println("writeForm");
 
@@ -47,7 +47,7 @@ public class PhoneController {
 	}
 
 	// 등록
-	@RequestMapping(value ="write", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value ="/write", method = {RequestMethod.GET, RequestMethod.POST})
 	public String write(@RequestParam("name") String name, @RequestParam("hp") String hp, @RequestParam("company") String company) {
 		System.out.println("write");
 
@@ -61,7 +61,7 @@ public class PhoneController {
 	}
 	
 	// 수정폼 -> modifyForm
-	@RequestMapping(value="modifyForm", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value="/modifyForm", method = {RequestMethod.GET, RequestMethod.POST})
 	public String modifyForm(Model model, @RequestParam("id") int id) {
 		System.out.println("modifyForm");
 		
@@ -86,7 +86,7 @@ public class PhoneController {
 	}
 
 	// 삭제 -> delete
-	@RequestMapping(value="delete", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value="/delete", method = {RequestMethod.GET, RequestMethod.POST})
 	public String delete(@RequestParam("id") int id) {
 		System.out.println("delete");
 		
