@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +37,7 @@ public class PhoneController {
 		//model -> date를 보내는 방법 -> 담아 놓으면 된다.
 		model.addAttribute("pList", personList);
 
-		return "/WEB-INF/views/list.jsp";
+		return "list";
 	}
 
 	// 등록폼
@@ -43,7 +45,7 @@ public class PhoneController {
 	public String writeForm() {
 		System.out.println("writeForm");
 
-		return "/WEB-INF/views/writeForm.jsp";
+		return "writeForm";
 	}
 
 	// 등록
@@ -62,7 +64,7 @@ public class PhoneController {
 	
 	// 수정폼 -> modifyForm
 	@RequestMapping(value="/modifyForm", method = {RequestMethod.GET, RequestMethod.POST})
-	public String modifyForm(Model model, @RequestParam("id") int id) {
+	public String modifyForm(Model model, @RequestParam("personId") int id) {
 		System.out.println("modifyForm");
 		
 		PhoneDao phoneDao = new PhoneDao();
@@ -70,29 +72,52 @@ public class PhoneController {
 		
 		model.addAttribute("pVo", personVo);
 		
-		return "/WEB-INF/views/updateForm.jsp";
+		return "updateForm";
 	}
 	
-	// 수정 -> modify
+	// 수정 -> modify : @ModelAttribute 활용
 	@RequestMapping(value="/modify", method = {RequestMethod.GET, RequestMethod.POST})
-	public String modify(@RequestParam("id") int id, @RequestParam("name") String name, @RequestParam("hp") String hp, @RequestParam("company") String company) {
+	public String modify(@ModelAttribute PersonVo personVo) {
 		System.out.println("modify");
 		
-		PersonVo personVo = new PersonVo(id, name, hp, company);
+		PhoneDao phoneDao = new PhoneDao();
+		phoneDao.personUpdate(personVo);
+			
+		return "redirect:/phone/list";
+	}
+	
+	//수정 -> modify : @RequestParam 사용 (비교용 원본)
+	@RequestMapping(value="/modify2", method = {RequestMethod.GET, RequestMethod.POST})
+	public String modify2(@RequestParam("personId") int personId, @RequestParam("name") String name, @RequestParam("hp") String hp, @RequestParam("company") String company) {
+		System.out.println("modify");
+		
+		PersonVo personVo = new PersonVo(personId, name, hp, company);
 		PhoneDao phoneDao = new PhoneDao();
 		phoneDao.personUpdate(personVo);
 			
 		return "redirect:/phone/list";
 	}
 
-	// 삭제 -> delete
-	@RequestMapping(value="/delete", method = {RequestMethod.GET, RequestMethod.POST})
-	public String delete(@RequestParam("id") int id) {
+	// 삭제 -> delete(@RequestMapping 약식 표현) : @PathVariable 활용
+	@RequestMapping(value="/delete/{personId}")
+	public String delete(@PathVariable("personId") int personId) {
 		System.out.println("delete");
 		
 		PhoneDao phoneDao = new PhoneDao();
-		phoneDao.personDelete(id);
+		phoneDao.personDelete(personId);
 		
 		return "redirect:/phone/list";
 	}
+	
+	// 삭제 -> delete(@RequestMapping 약식 표현) : @RequestParam 사용 (비교용 원본)
+	@RequestMapping(value="/delete2")
+	public String delete2(@RequestParam("personId") int personId) {
+		System.out.println("delete");
+		
+		PhoneDao phoneDao = new PhoneDao();
+		phoneDao.personDelete(personId);
+		
+		return "redirect:/phone/list";
+	}
+	
 }
